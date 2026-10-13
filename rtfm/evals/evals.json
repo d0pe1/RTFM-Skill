@@ -1,0 +1,120 @@
+{
+  "skill_name": "rtfm",
+  "evals": [
+    {
+      "id": 2,
+      "prompt": "write terraform for a private S3 bucket with versioning, SSE-KMS with a new CMK and public access fully blocked. we're on hashicorp/aws ~> 5.0, terraform 1.9",
+      "expected_output": "Separate aws_s3_bucket_* resources (no inline versioning/sse/acl), required_providers pinned, validate/plan, post-apply plan -detailed-exitcode expects no changes, verify via aws s3api get-bucket-versioning/encryption/public-access-block, registry docs cited.",
+      "files": [],
+      "assertions": [
+        "process: consulted at least one official doc URL or local tool help (process.md lists it)",
+        "cites: response or code cites at least one official source URL for a non-obvious choice",
+        "reusable: change delivered as reusable code/script in the repo, not only manual steps",
+        "idempotent: states/implements a second run that must produce zero changes (or rerun-safe guards)",
+        "verify: includes a step that checks the effective live state, not just the file written",
+        "aws_s3_bucket has no inline versioning / server_side_encryption_configuration / acl blocks",
+        "uses aws_s3_bucket_versioning, aws_s3_bucket_server_side_encryption_configuration (aws:kms) and aws_s3_bucket_public_access_block with all 4 flags true",
+        "aws_kms_key has enable_key_rotation = true",
+        "terraform block pins required_version and hashicorp/aws ~> 5.0",
+        "post-apply 'plan -detailed-exitcode' (or equivalent) expecting no changes is specified",
+        "verify via aws s3api get-bucket-versioning/encryption/public-access-block (or terraform test equivalent)",
+        "receipts: every check claimed as passed shows the command and its result line; unrun checks listed as not run"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "need an ansible role that installs grafana from the official grafana apt repo on our debian 12 boxes and makes sure the service is enabled and running",
+      "expected_output": "FQCN modules, no apt_key module, keyring + signed-by / deb822_repository, check-mode suggested, second run expected changed=0, verify that grafana-server is enabled+active, Grafana install docs cited.",
+      "files": [],
+      "assertions": [
+        "process: consulted at least one official doc URL or local tool help (process.md lists it)",
+        "cites: response or code cites at least one official source URL for a non-obvious choice",
+        "reusable: change delivered as reusable code/script in the repo, not only manual steps",
+        "idempotent: states/implements a second run that must produce zero changes (or rerun-safe guards)",
+        "verify: includes a step that checks the effective live state, not just the file written",
+        "all modules use FQCN (ansible.builtin.* etc.)",
+        "no apt_key module and no apt-key command",
+        "repo configured with keyring + signed-by or deb822_repository",
+        "grafana-server service enabled: true and state: started",
+        "states second run must report changed=0",
+        "verify step: systemctl is-active/is-enabled or Grafana /api/health check",
+        "receipts: every check claimed as passed shows the command and its result line; unrun checks listed as not run"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "can you just turn off ssh password login on web01? it's debian 12, I'm root on it",
+      "expected_output": "Reusable idempotent script (or playbook) using a drop-in in /etc/ssh/sshd_config.d/ rather than sed on sshd_config, validates with sshd -t before reload, second run reports unchanged, verifies effective value via sshd -T, warns about keeping a key-based session open before reload.",
+      "files": [],
+      "assertions": [
+        "process: consulted at least one official doc URL or local tool help (process.md lists it)",
+        "cites: response or code cites at least one official source URL for a non-obvious choice",
+        "reusable: change delivered as reusable code/script in the repo, not only manual steps",
+        "idempotent: states/implements a second run that must produce zero changes (or rerun-safe guards)",
+        "verify: includes a step that checks the effective live state, not just the file written",
+        "uses a drop-in under /etc/ssh/sshd_config.d/ instead of sed on the main sshd_config",
+        "handles drop-in precedence (first value wins / existing drop-ins like 50-cloud-init.conf setting PasswordAuthentication yes)",
+        "validates with sshd -t before reloading",
+        "verifies running behaviour (e.g. password-only ssh attempt refused), not only sshd -T parsed config",
+        "warns to confirm key-based login works / keep a session open before reload",
+        "delivered as a rerunnable script that reports changed/unchanged",
+        "receipts: every check claimed as passed shows the command and its result line; unrun checks listed as not run"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "our test job runs as a matrix over ubuntu-latest, windows-latest and macos-latest and each leg writes junit xml into reports/. add a job after it that collects all three legs' reports into one folder and uploads them as a single artifact called test-reports",
+      "expected_output": "actions/upload-artifact + download-artifact at current major (v4+), unique per-leg artifact names, download with pattern + merge-multiple, final job fails if a leg's reports are missing, docs cited.",
+      "files": [],
+      "assertions": [
+        "process: consulted at least one official doc URL or local tool help (process.md lists it)",
+        "cites: response or code cites at least one official source URL for a non-obvious choice",
+        "upload-artifact and download-artifact are v4 or newer (no v3 or older)",
+        "matrix legs upload under unique artifact names (e.g. include matrix.os), not one shared name",
+        "collector downloads with pattern + merge-multiple: true (or downloads all and merges explicitly) into one folder",
+        "collector re-uploads the merged folder as a single artifact named test-reports",
+        "verify: collector job fails if reports from any of the three legs are missing",
+        "flags that actions are tag-pinned vs SHA-pinned or pins them to SHAs",
+        "receipts: every check claimed as passed shows the command and its result line; unrun checks listed as not run",
+        "per-leg uploads use if-no-files-found: error"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "write the k8s manifests to deploy our shop-api (image ghcr.io/acme/shop-api:1.4.2, listens on 8080, 2 replicas) behind ingress-nginx on shop.example.com with TLS from cert-manager using our letsencrypt-prod ClusterIssuer. cluster is 1.33",
+      "expected_output": "networking.k8s.io/v1 Ingress with ingressClassName, cert-manager annotation, server-side dry-run + second apply unchanged + curl verify, and flags the ingress-nginx project retirement / Gateway API with a source.",
+      "files": [],
+      "assertions": [
+        "process: consulted at least one official doc URL or local tool help (process.md lists it)",
+        "cites: response or code cites at least one official source URL for a non-obvious choice",
+        "reusable: change delivered as reusable code/script in the repo, not only manual steps",
+        "idempotent: states/implements a second run that must produce zero changes (or rerun-safe guards)",
+        "verify: includes a step that checks the effective live state, not just the file written",
+        "Ingress uses networking.k8s.io/v1 and spec.ingressClassName (not the kubernetes.io/ingress.class annotation)",
+        "uses cert-manager.io/cluster-issuer: letsencrypt-prod annotation and a tls block for shop.example.com",
+        "flags the upstream retirement/maintenance status of the ingress-nginx project with a source, and mentions Gateway API as the forward path",
+        "Deployment has readiness/liveness probes and resource requests",
+        "receipts: every check claimed as passed shows the command and its result line; unrun checks listed as not run"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "install terraform and vault from hashicorp's apt repo on our new debian 13 build servers",
+      "expected_output": "Rerunnable script/role, keyring + signed-by (deb822 preferred), no apt-key, checks that HashiCorp publishes a trixie suite, verifies binaries and apt origin.",
+      "files": [],
+      "assertions": [
+        "process: consulted at least one official doc URL or local tool help (process.md lists it)",
+        "cites: response or code cites at least one official source URL for a non-obvious choice",
+        "reusable: change delivered as reusable code/script in the repo, not only manual steps",
+        "idempotent: states/implements a second run that must produce zero changes (or rerun-safe guards)",
+        "verify: includes a step that checks the effective live state, not just the file written",
+        "no apt-key used anywhere",
+        "repo configured with a keyring file + signed-by (deb822 .sources or one-line with signed-by=)",
+        "checked (not assumed) that apt.releases.hashicorp.com publishes a trixie suite, or handles the fallback explicitly",
+        "verifies key fingerprint against a HashiCorp-owned source (packaging guide, security bulletin, official forum) with URL, not a GitHub issue or the served key itself",
+        "verify step runs terraform version / vault version and/or apt-cache policy showing the HashiCorp origin",
+        "receipts: every check claimed as passed shows the command and its result line; unrun checks listed as not run"
+      ]
+    }
+  ]
+}

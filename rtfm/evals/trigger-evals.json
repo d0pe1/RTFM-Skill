@@ -1,0 +1,22 @@
+[
+  {"query": "add a step to our github workflow (.github/workflows/release.yml) that builds the docker image for linux/amd64 and arm64 and pushes it to ghcr with the git tag as version", "should_trigger": true},
+  {"query": "can you write me a bash script that sets up unattended-upgrades on our ubuntu 24.04 fleet, only security updates, auto reboot at 3am", "should_trigger": true},
+  {"query": "our proxmox terraform (bpg/proxmox provider) needs a new vm resource for a 4 core 8gb debian template clone with cloud-init, look at modules/vm for how we do it", "should_trigger": true},
+  {"query": "install k3s on these three raspberry pis and join them as one cluster, first one is server. hostnames pi1 pi2 pi3", "should_trigger": true},
+  {"query": "set up wireguard between the two hetzner boxes so they can talk on a private 10.99.0.0/24, persist across reboots", "should_trigger": true},
+  {"query": "write a helm values override for kube-prometheus-stack so grafana gets an ingress on grafana.lab.local and prometheus keeps 30d retention", "should_trigger": true},
+  {"query": "PowerShell script to join a fresh Windows Server 2025 box to corp.local, rename it to FS02 and install the file server role", "should_trigger": true},
+  {"query": "gitlab-ci: add a stage that runs terraform plan on merge requests and posts the plan as an MR comment", "should_trigger": true},
+  {"query": "nginx on web02 needs http/3 enabled, can you sort that out", "should_trigger": true},
+  {"query": "bump our ansible roles so they work on rocky 10, currently they only target rocky 8", "should_trigger": true},
+  {"query": "explain the difference between terraform count and for_each, i keep mixing them up. no code needed just conceptually", "should_trigger": false},
+  {"query": "here's a failing pytest in tests/test_parser.py, the date parsing returns None for '2026-10-13T09:00Z', fix the parser in src/parse.py", "should_trigger": false},
+  {"query": "write a short blog post for our engineering blog about why we moved from jenkins to github actions, ~600 words, casual tone", "should_trigger": false},
+  {"query": "review this react component for accessibility issues, it's a modal with a form inside (src/components/InviteModal.tsx)", "should_trigger": false},
+  {"query": "summarize this postmortem doc for the exec team in 5 bullets: [pasted text about a 40 minute outage caused by an expired cert]", "should_trigger": false},
+  {"query": "what does this regex do: ^(?=.*\\d)(?=.*[a-z]).{8,}$", "should_trigger": false},
+  {"query": "rename the variable `cfg` to `config` across src/ in this python project, nothing else", "should_trigger": false},
+  {"query": "draft a threat model for our internal admin portal, focus on authz between tenants", "should_trigger": false},
+  {"query": "write a SQL query that gets the top 10 customers by revenue last quarter from orders(customer_id, total, created_at)", "should_trigger": false},
+  {"query": "our kubernetes pods keep OOMKilling, here's kubectl top output — just tell me which one is the hog, don't change anything", "should_trigger": false}
+]
